@@ -7,60 +7,64 @@
 
 <h1>Товары</h1>
 
-<p>
+
     <a asp-page="Create" class="btn btn-primary">Создать</a>
-</p>
+<br/>
 
 @foreach (var item in Model.Product) {
+
+    decimal price = item.Price * (100 - item.Discount) / 100;
+
     <div class="card" style="margin: 10px">
 
         <div style="display: flex">
-            <div class="card">
-                <p>
+            <div class="card" style="width: 300px; display: flex">
                     <img src="~/images/@Html.DisplayFor(modelItem => item.Photo)"
-                         width="50px"
+                         width="200px"
                          onerror="this.src='/images/picture.png';" />
-                </p>
+                <br/>
             </div>
-        </div>
 
-        <div class="card">
-            <p>
+
+            <div class="card" style="width: 100%">
+            
                 @Html.DisplayFor(modelItem => item.Category)
                 |
                 @Html.DisplayFor(modelItem => item.Title)
-            </p>
+            <br/>
 
-            <p>
+            
                 Описание товара: @Html.DisplayFor(modelItem => item.Description)
-            </p>
-            <p>
+            <br/>
+            
                 Производитель: @Html.DisplayFor(modelItem => item.Manufacturer.Name)
-            </p>
-            <p>
+            <br/>
+            
                 Поставщик: @Html.DisplayFor(modelItem => item.Supplier.Name)
-            </p>
-            <p>
-                Цена:@Html.DisplayFor(modelItem => item.Price)
-            </p>
-            <p>
+            <br/>
+            
+                Цена:@item.Price.ToString("C")
+                Новая цена: @price.ToString("C")
+            <br/>
+            
                 Единица измерения: @Html.DisplayFor(modelItem => item.Unit)
-            </p>
-            <p>
+            <br/>
+            
                 Количество на складе: @Html.DisplayFor(modelItem => item.Amount)
-            </p>
+            <br/>
          </div>
 
-        <div class="card">
-            <p>
-                Действующая скидка: @Html.DisplayFor(modelItem => item.Discount)
-            </p>
-            <p>
-                <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-primary">Изменить</a>
-                <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-primary">Удалить</a>
-            </p>
+            <div class="card" style="width: 200px;display: flex; justify-content: center">
+            
+                Скидка: @Html.DisplayFor(modelItem => item.Discount) %
+            <br/>
+            @if (Model.UserRole == "Администатор")
+                {
+                    <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-primary">Изменить</a>
+                    <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-primary">Удалить</a>
+                }
+            <br/>
        </div>
-
-
-        </div>
+     </div>
+   </div>
 }
