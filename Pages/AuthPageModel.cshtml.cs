@@ -6,9 +6,15 @@ namespace StoreApplication35.Pages.Products
     public class AuthPageModel : PageModel
     {
         protected string UserRole => HttpContext.Session.GetString("UserRole");
-        public void OnGet()
-        {
 
+        protected IActionResult HasRole()
+        {
+            if (string.IsNullOrEmpty(UserRole))
+            {
+                return RedirectToPage("Login");
+            }
+
+            return null;
         }
     }
 }
