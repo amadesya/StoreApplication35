@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using StoreApplication35.Contexts;
 using StoreApplication35.Models;
 
 namespace StoreApplication35.Pages.Products
@@ -19,18 +13,18 @@ namespace StoreApplication35.Pages.Products
             _context = context;
         }
 
-        public IList<Product> Product { get;set; } = default!;
+        public IList<Product> Product { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
-            if (string.IsNullOrEmpty(UserRole))
+            if (HasRole() != null)
             {
-                return RedirectToPage("../Login");
-            }
+                Product = await _context.Products
+                    .Include(p => p.Manufacturer)
+                    .Include(p => p.Supplier).ToListAsync();
 
-            Product = await _context.Products
-                .Include(p => p.Manufacturer)
-                .Include(p => p.Supplier).ToListAsync();
+                return Page();
+            }
             return Page();
         }
     }

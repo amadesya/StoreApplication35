@@ -5,7 +5,7 @@ namespace StoreApplication35.Pages.Products
 {
     public class AuthPageModel : PageModel
     {
-        protected string UserRole => HttpContext.Session.GetString("UserRole");
+        public string UserRole => HttpContext.Session.GetString("UserRole");
 
         protected IActionResult HasRole()
         {
