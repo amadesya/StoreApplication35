@@ -10,7 +10,7 @@ using StoreApplication35.Models;
 
 namespace StoreApplication35.Pages.Products
 {
-    public class IndexModel : PageModel
+    public class IndexModel : AuthPageModel
     {
         private readonly StoreApplication35.Contexts.Dbde3512Context _context;
 
@@ -21,11 +21,8 @@ namespace StoreApplication35.Pages.Products
 
         public IList<Product> Product { get;set; } = default!;
 
-        public string UserRole { get; set; }    
-
         public async Task<IActionResult> OnGetAsync()
         {
-            UserRole = HttpContext.Session.GetString("UserRole");
             if (string.IsNullOrEmpty(UserRole))
             {
                 return RedirectToPage("../Login");

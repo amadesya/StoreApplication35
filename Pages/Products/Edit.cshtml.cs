@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using StoreApplication35.Contexts;
 using StoreApplication35.Models;
@@ -51,6 +52,14 @@ namespace StoreApplication35.Pages.Products
             //    return Page();
             //}
 
+            var file = HttpContext.Request.Form.Files.FirstOrDefault();
+            if (file?.Length > 0)
+            {
+                var path = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot","images",file.FileName);
+                using var stream = new FileStream(path, FileMode.Create);
+                await file.CopyToAsync(stream);
+                Product.Photo = file.FileName; 
+            }
             _context.Attach(Product).State = EntityState.Modified;
 
             try
