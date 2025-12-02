@@ -11,14 +11,18 @@
 {
     <form method="get">
         <input type="text" name="Search" value="@Model.Search" placeholder="Поиск..." 
-            onchange="this.form.submit()"/>
-        <select name="Sort" onchange="this.form.submit()">
+        onchange="this.form.submit()"/>
+        <select class="form-control" name="Sort" onchange="this.form.submit()">
             <option value="price" selected="@(Model.Sort == "price")">По цене (дешевые)</option>
-            <option value="price_desc" selected="@(Model.Sort == "price_desc")">По цене (дорогие)</option>
+            <option value="price_desc" selected="@(Model.Sort == "price_desc")">По цене (дорогие)</option>                      
         </select>
+
+        <select class="form-control" asp-items="ViewBag.ManufacturerId" asp-for="Filter" onchange="this.form.submit()">
+            <option value="0" selected="@(Model.Filter == 0)">Все производители</option>
+        </select>
+
     </form>
 }
-
 @if (Model.IsAdmin)
 {
     <a asp-page="Create" class="btn btn-primary">Создать</a>
