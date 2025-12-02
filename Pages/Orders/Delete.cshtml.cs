@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using StoreApplication35.Contexts;
 using StoreApplication35.Models;
+using StoreApplication35.Pages.Products;
 
 namespace StoreApplication35.Pages.Orders
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel : AuthPageModel
     {
         private readonly StoreApplication35.Contexts.Dbde3512Context _context;
 
@@ -43,6 +44,10 @@ namespace StoreApplication35.Pages.Orders
 
         public async Task<IActionResult> OnPostAsync(int? id)
         {
+
+            if (CanEdit() is IActionResult result)
+                return result;
+
             if (id == null)
             {
                 return NotFound();

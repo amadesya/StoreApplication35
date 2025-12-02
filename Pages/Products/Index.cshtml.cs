@@ -15,16 +15,35 @@ namespace StoreApplication35.Pages.Products
 
         public IList<Product> Product { get; set; } = default!;
 
+        [BindProperty(SupportsGet = true)]
+        public string Search {  get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string Sort {  get; set; }
+
         public async Task<IActionResult> OnGetAsync()
         {
-            if (HasRole() != null)
-            {
-                Product = await _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Supplier).ToListAsync();
+            if (HasRole() is IActionResult result)
+                return result;
+            
+            Product = await _context.Products
+                .Include(p => p.Manufacturer)
+                .Include(p => p.Supplier).ToListAsync();
 
-                return Page();
-            }
+            if (Search != null)
+                Product = Product.Where(p => p.Article.Contains(Search) ||
+                p.Title.Contains(Search))
+                    .ToList();
+
+            if (Sort != null && Sort == "price")
+                Product = Product
+                    .OrderBy(p => p.Price)
+                    .ToList();
+            if (Sort != null && Sort == "price_desc")
+                Product = Product
+                    .OrderByDescending(p => p.Price)
+                    .ToList();
+            
             return Page();
         }
     }

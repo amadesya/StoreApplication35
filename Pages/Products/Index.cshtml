@@ -7,8 +7,22 @@
 
 <h1>Товары</h1>
 
+@if (Model.IsAdmin)
+{
+    <form method="get">
+        <input type="text" name="Search" value="@Model.Search" placeholder="Поиск..." 
+            onchange="this.form.submit()"/>
+        <select name="Sort" onchange="this.form.submit()">
+            <option value="price" selected="@(Model.Sort == "price")">По цене (дешевые)</option>
+            <option value="price_desc" selected="@(Model.Sort == "price_desc")">По цене (дорогие)</option>
+        </select>
+    </form>
+}
 
+@if (Model.IsAdmin)
+{
     <a asp-page="Create" class="btn btn-primary">Создать</a>
+}
 <br/>
 
 @foreach (var item in Model.Product) {
@@ -58,7 +72,7 @@
             
                 Скидка: @Html.DisplayFor(modelItem => item.Discount) %
             <br/>
-                @if (Model.UserRole == "Администратор")
+                @if (Model.IsAdmin)
                 {
                     <a asp-page="./Edit" asp-route-id="@item.Id" class="btn btn-primary">Изменить</a>
                     <a asp-page="./Delete" asp-route-id="@item.Id" class="btn btn-primary">Удалить</a>

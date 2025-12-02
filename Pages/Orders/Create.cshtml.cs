@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using StoreApplication35.Contexts;
 using StoreApplication35.Models;
+using StoreApplication35.Pages.Products;
 
 namespace StoreApplication35.Pages.Orders
 {
-    public class CreateModel : PageModel
+    public class CreateModel : AuthPageModel
     {
         private readonly StoreApplication35.Contexts.Dbde3512Context _context;
 
@@ -31,10 +32,8 @@ namespace StoreApplication35.Pages.Orders
         // For more information, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
-            if (!ModelState.IsValid)
-            {
-                return Page();
-            }
+            if (CanEdit() is IActionResult result)
+                return result;
 
             _context.Orders.Add(Order);
             await _context.SaveChangesAsync();
